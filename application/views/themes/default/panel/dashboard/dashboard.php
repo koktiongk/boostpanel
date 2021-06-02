@@ -131,7 +131,7 @@
 									<?php
 									foreach ($list_news_updated_disable as $value) :
 										$id_service_disables = explode(',', $value->desc_disables);
-										$id_service_updates = explode(',', $value->desc_updates);
+										$id_service_updates_ids = explode(',', $value->desc_updates);
 									?>
 										<div class="news-list-item">
 											<span class="young-passion-gradient text-white p-1 fs-13 rounded date">
@@ -143,12 +143,13 @@
 													<div class="title text-green mt-3"><?= lang("updated"); ?></div>
 													<?php
 													if ($value->desc_updates != '' || !empty($value->desc_updates)) :
-														foreach ($id_service_updates as $updated) :
-															if ($updated != '') :
-																$name_service_update = $this->model->get('*', TABLE_SERVICES, ['api_service_id' => $updated], '', '', true);
+														$service_updates = $this->model->get_where_in('*', TABLE_SERVICES, ['api_service_id' => $id_service_updates_ids], '', '', true,0,10);
+														
+														foreach ($service_updates as $service_update) :
+															if (!empty($service_update)) :
 													?>
 																<ul class="list">
-																	<li class="list-item fs-13"><strong><?= $updated; ?></strong> - <?= $name_service_update['name']; ?></li>
+																	<li class="list-item fs-13"><strong><?= $service_update["id"]; ?></strong> - <?= $service_update["name"]; ?></li>
 																</ul>
 													<?php endif;
 														endforeach;
@@ -159,12 +160,13 @@
 													<div class="title text-danger"><?= lang("disabled"); ?></div>
 													<?php
 													if ($value->desc_disables != '' || !empty($value->desc_disables)) :
-														foreach ($id_service_disables as $disable) :
-															if ($disable != '') :
-																$name_service_disabled = $this->model->get('*', TABLE_SERVICES, ['api_service_id' => $disable], '', '', true);
+														$service_disables = $this->model->get_where_in('*', TABLE_SERVICES, ['api_service_id' => $id_service_disables], '', '', true,0,10);
+
+														foreach ($service_disables as $service_disable) :
+															if (!empty($service_disable)) :
 													?>
 																<ul class="list">
-																	<li class="list-item fs-13"><strong><?= $disable; ?></strong> - <?= $name_service_disabled['name']; ?></li>
+																	<li class="list-item fs-13"><strong><?= $service_disable["id"]; ?></strong> - <?= $service_disable['name']; ?></li>
 																</ul>
 													<?php endif;
 														endforeach;

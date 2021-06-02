@@ -71,6 +71,52 @@ class MY_Model extends CI_Model
 	/**
 	 * @param string $select
 	 * @param $table
+	 * @param array $where
+	 * @param string $order
+	 * @param string $by
+	 * @param bool $return_array
+	 * @return mixed
+	 */
+	public function get_where_in($select = "*", $table, $where = [], $order = "", $by = "DESC", $return_array = false,$start = -1 , $limit = 0)
+	{
+		$this->db->select($select);
+		if ($where != "")
+		{
+			$column = array_keys($where)[0];
+			$column_value = $where[$column];			
+			$this->db->where_in($column,$column_value);
+		}
+		if ($order != "" && (strtolower($by) == "desc" || strtolower($by) == "asc")) {
+			if ($order == 'rand') {
+				$this->db->order_by('rand()');
+			} else {
+				$this->db->order_by($order, $by);
+			}
+		}
+
+		if ((int) $start >= 0 && (int) $limit > 0) {
+			$this->db->limit($limit, $start);
+		}
+
+		$query = $this->db->get($table);
+		
+		if ($return_array) {
+			foreach ($query->result_array() as $row){
+				$result[] = $row;
+			}			
+		} else {
+			$result = $query->row();
+		}
+		
+		$query->free_result();
+		
+		return $result;
+	}
+
+
+	/**
+	 * @param string $select
+	 * @param $table
 	 * @param string $where
 	 * @param string $order
 	 * @param string $by
