@@ -57,9 +57,10 @@
 								</tr>
 							</thead>
 							<?php
-							foreach ($categories as $value) :
-								$services = $this->model->fetch('*', TABLE_SERVICES, ['category_id' => $value->id], 'created_at', 'desc', '', '');
 
+							foreach ($categories as $value) :
+								$services = $this->model->fetch('*', TABLE_SERVICES, ['category_id' => $value->id], 'created_at', 'desc', '', '',false,"file_catch_Services".$value->id);
+								
 								if ($value->status == 0) :
 									$status = "<div class='badge badge-danger cursor-pointer fs-12'>" . lang('badge_category_disabled') . "</div>";
 									$border = 'class="border-inactive"';

@@ -7,13 +7,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
 | CONFIG MYSQL DATABASE
 |--------------------------------------------------------------------------
  */
-$config['hostname'] = '__HOSTNAME__';
-$config['username'] = '__USERNAME__';
-$config['password'] = '__PASSWORD__';
-$config['database'] = '__DATABASE__';
-$config['dbdriver'] = '__DBDRIVER__';
-$config['timezone'] = '__TIMEZONE__';
-$config['security_token'] = '__SECURITY_CRONJOB_';
+$config['hostname'] = 'localhost';
+$config['username'] = 'root';
+$config['password'] = '800800123';
+$config['database'] = 'boostpanel_master';
+$config['dbdriver'] = 'mysqli';
+$config['timezone'] = 'Asia/Kuala_Lumpur';
+$config['security_token'] = 'oogh1Rn7UtrVf705';
 
 // Set Theme
 $config['theme'] = 'default';
@@ -43,7 +43,7 @@ $config['theme'] = 'default';
 $protocolo = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' || $_SERVER['SERVER_PORT'] == 443) ? 'https' : 'http';
 $host = $_SERVER['HTTP_HOST'];
 $url = $protocolo . '://' . $host;
-$config['base_url'] = $url;
+$config['base_url'] = $url."/boostpanel_master";
 /*
 |--------------------------------------------------------------------------
 | Index File

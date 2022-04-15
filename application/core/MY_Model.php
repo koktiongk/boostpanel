@@ -7,6 +7,7 @@ class MY_Model extends CI_Model
 	public function __construct()
 	{
 		parent::__construct();
+		$this->load->driver('cache');
 	}
 
 	/**
@@ -36,13 +37,20 @@ class MY_Model extends CI_Model
 		$by = "DESC",
 		$start = -1,
 		$limit = 0,
-		$return_array = false
+		$return_array = false,
+		$catch_key = "None"
 	) {
+		if( $this->cache->file->get($catch_key) && $catch_key!= "None"){
+		 	$result = unserialize($this->cache->file->get($catch_key));
+			return $result ;
+		}
+
+
 		$this->db->select($select);
 		if ($where != "") {
 			$this->db->where($where);
 		}
-
+		
 		if ($order != "" && (strtolower($by) == "desc" || strtolower($by) == "asc")) {
 			if ($order == 'rand') {
 				$this->db->order_by('rand()');
@@ -56,12 +64,26 @@ class MY_Model extends CI_Model
 		}
 
 		$query = $this->db->get($table);
-
-		if ($return_array) {
-			$result = $query->result_array();
-		} else {
-			$result = $query->result();
+		if($catch_key == "None"){
+			if ($return_array) {
+				$result = $query->result_array();
+			} else {
+				$result = $query->result();
+			}
 		}
+
+		if( !$this->cache->file->get($catch_key) && $catch_key!= "None"){
+			if ($return_array) {
+				$result = $query->result_array();
+			} else {
+				$result = $query->result();
+			}
+			$this->cache->file->save($catch_key,serialize($result), configs("cache_timeout_secs","value"));
+		}else{
+			$result = unserialize($this->cache->file->get($catch_key));
+			
+		}
+	
 
 		$query->free_result();
 
@@ -109,7 +131,7 @@ class MY_Model extends CI_Model
 		}
 		
 		$query->free_result();
-		
+
 		return $result;
 	}
 

@@ -45,11 +45,12 @@ class Services extends MY_Controller
 	public function index_admin()
 	{
 		if (!userLevel(logged(), 'admin')) return redirect(base_url());
-
+	
+		
 		$data = [
 			'title' => lang("title_services_management"),
 			'rows_services' => $this->model->counts($this->table),
-			'categories' => $this->model->fetch('*', $this->table_category, '', 'id', 'asc', '', ''),
+			'categories' =>  $this->model->fetch('*', $this->table_category, '', 'id', 'asc', '', '',false,"file_catch_Categories"),
 			'rows_categories' => $this->model->counts($this->table_category)
 		];
 
